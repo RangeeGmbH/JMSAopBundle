@@ -41,10 +41,9 @@ class JMSAopExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $cacheDir = $container->getParameterBag()->resolveValue($config['cache_dir']);
-        if (!is_dir($cacheDir)) {
-            if (false === @mkdir($cacheDir, 0777, true)) {
-                throw new RuntimeException(sprintf('Could not create cache directory "%s".', $cacheDir));
-            }
+        if (!file_exists($cacheDir) && !@mkdir($cacheDir, 0777, true) && !is_dir($cacheDir)) {
+            exec(sprintf('mkdir -p %s', $cacheDir));
+            //throw new RuntimeException(sprintf('Could not create cache directory "%s".', $cacheDir));
         }
         $container->setParameter('jms_aop.cache_dir', $cacheDir);
 

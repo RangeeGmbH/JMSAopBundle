@@ -63,8 +63,9 @@ class PointcutMatchingPassTest extends \PHPUnit_Framework_TestCase
             $this->fs->remove($this->cacheDir);
         }
 
-        if (false === @mkdir($this->cacheDir, 0777, true)) {
-            throw new RuntimeException(sprintf('Could not create cache dir "%s".', $this->cacheDir));
+        if (!file_exists($this->cacheDir) && !@mkdir($this->cacheDir, 0777, true) && !is_dir($this->cacheDir)) {
+            exec(sprintf('mkdir -p %s', $this->cacheDir));
+            //throw new RuntimeException(sprintf('Could not create cache dir "%s".', $this->cacheDir));
         }
     }
 
